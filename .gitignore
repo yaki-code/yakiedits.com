@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+._*
+
+# editor/OS junk
+Thumbs.db
+*.swp
+
+# logs / temp
+*.log
