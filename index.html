@@ -164,7 +164,7 @@ header.nav.scrolled{
 /* ============ HERO ============ */
 .hero{padding-top:calc(var(--nav-h) + 60px);padding-bottom:var(--s6);overflow:hidden}
 .hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:56px;align-items:center}
-.hero-copy h1{font-size:clamp(2.6rem,6vw,4.6rem);font-weight:800;margin:22px 0}
+.hero-copy h1{font-size:clamp(2.1rem,4.8vw,3.7rem);font-weight:800;margin:20px 0;line-height:1.08}
 .hero-copy .sub{font-size:1.18rem;color:var(--muted);max-width:520px;margin-bottom:34px}
 .hero-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
 .btn-primary{
@@ -390,25 +390,32 @@ header.nav.scrolled{
 /* --- premiere box always clips internal content --- */
 .pr{overflow:hidden}
 
-/* ============ MARQUEE / CLIENT WHEEL ============ */
-.marquee-wrap{padding:var(--s4) 0;border-block:1px solid var(--border);background:rgba(0,0,0,.2)}
-.marquee-label{text-align:center;font-size:.8rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-bottom:26px}
+/* ============ CLIENTS (game-ified grid) ============ */
+.marquee-wrap{padding:var(--s5) 0;border-block:1px solid var(--border);background:rgba(0,0,0,.2)}
+.marquee-label{text-align:center;font-size:.8rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-bottom:30px}
 .marquee-label b{color:var(--gold-light)}
-.marquee{display:flex;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-.marquee-track{display:flex;gap:16px;padding-inline:8px;animation:scroll 36s linear infinite;flex-shrink:0}
-.marquee:hover .marquee-track{animation-play-state:paused}
-@keyframes scroll{to{transform:translateX(calc(-50% - 8px))}}
-@media (prefers-reduced-motion:reduce){.marquee-track{animation:none;flex-wrap:wrap;justify-content:center}}
-.client-chip{
-  display:flex;align-items:center;gap:13px;padding:12px 22px 12px 12px;border-radius:999px;
-  background:var(--surface);border:1px solid var(--border);white-space:nowrap;transition:border-color .2s,transform .2s,background .2s;
-}
-.client-chip:hover{border-color:var(--gold);transform:translateY(-3px);background:var(--surface-2)}
-.client-chip img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--border-strong)}
-.client-chip .n{font-family:"Baloo 2";font-weight:700;font-size:1.02rem;display:flex;align-items:center;gap:6px}
-.client-chip .n svg{width:14px;height:14px;fill:var(--muted-2);transition:fill .2s}
-.client-chip:hover .n svg{fill:var(--gold)}
-.client-chip .s{font-size:.8rem;color:var(--gold-light);font-weight:600}
+.client-grid{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;max-width:1080px;margin-inline:auto;
+  padding:6px 6px 16px;scroll-padding-inline:6px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
+  scrollbar-width:thin;scrollbar-color:rgba(91,120,214,.5) transparent}
+.client-grid::-webkit-scrollbar{height:8px}
+.client-grid::-webkit-scrollbar-thumb{background:rgba(91,120,214,.45);border-radius:8px}
+.client-grid::-webkit-scrollbar-thumb:hover{background:var(--navy-accent)}
+.client-grid::-webkit-scrollbar-track{background:rgba(255,255,255,.03);border-radius:8px}
+.gcard{position:relative;flex:0 0 172px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px 12px 15px;border-radius:18px;
+  background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--border);overflow:hidden;
+  box-shadow:0 12px 28px -16px rgba(0,0,0,.85);transition:transform .22s cubic-bezier(.2,.8,.2,1),border-color .22s,box-shadow .22s}
+.gcard::before{content:"";position:absolute;inset:0 0 auto 0;height:54%;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent);pointer-events:none}
+.gcard:hover{transform:translateY(-6px);border-color:var(--navy-accent);box-shadow:0 0 0 1px var(--navy-border),0 22px 46px -18px rgba(91,120,214,.55)}
+.gcard .av{width:96px;height:96px;border-radius:16px;object-fit:cover;border:2px solid var(--border-strong);box-shadow:0 6px 16px -6px rgba(0,0,0,.7);transition:border-color .22s;position:relative;z-index:1}
+.gcard:hover .av{border-color:var(--gold)}
+.gcard .plat{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);border:1px solid var(--border);z-index:2}
+.gcard .plat svg{width:13px;height:13px}
+.gcard .plat.yt svg{fill:#ff5a5a}
+.gcard .plat.x svg{fill:#fff}
+.gcard .gn{font-family:"Baloo 2";font-weight:700;font-size:1rem;color:var(--text);text-align:center;line-height:1.12;position:relative;z-index:1}
+.gcard .gs{font-size:.82rem;font-weight:700;color:var(--gold-light);position:relative;z-index:1}
+@media (max-width:560px){.gcard{flex-basis:150px}.gcard .av{width:84px;height:84px}}
 
 /* ============ STATS ============ */
 .stats{padding:var(--s6) 0}
@@ -612,8 +619,8 @@ footer{padding:52px 0 40px;border-top:1px solid var(--border)}
       <a href="#reviews" class="nav-anchor">Reviews</a>
     </nav>
     <div class="nav-right">
-      <a href="https://x.com/yakiedt" target="_blank" rel="noopener" class="nav-cta">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.6h3.5l-7.6 8.7 9 11.9h-7l-5.5-7.2-6.3 7.2H1.5l8.2-9.3L1 1.6h7.2l5 6.6 5.7-6.6Zm-1.2 18.4h1.9L6.4 3.6H4.3l13.4 16.4Z"/></svg>
+      <a href="https://calendly.com/yakimii320/30min" target="_blank" rel="noopener" class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg>
         Book a Call
       </a>
       <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
@@ -627,9 +634,9 @@ footer{padding:52px 0 40px;border-top:1px solid var(--border)}
   <a href="#work">My Work</a>
   <a href="#clients">Clients</a>
   <a href="#reviews">Reviews</a>
-  <a href="https://x.com/yakiedt" target="_blank" rel="noopener" class="nav-cta">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.6h3.5l-7.6 8.7 9 11.9h-7l-5.5-7.2-6.3 7.2H1.5l8.2-9.3L1 1.6h7.2l5 6.6 5.7-6.6Zm-1.2 18.4h1.9L6.4 3.6H4.3l13.4 16.4Z"/></svg>
-    DM me on X
+  <a href="https://calendly.com/yakimii320/30min" target="_blank" rel="noopener" class="nav-cta">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg>
+    Book a Call
   </a>
 </div>
 
@@ -639,12 +646,12 @@ footer{padding:52px 0 40px;border-top:1px solid var(--border)}
     <div class="hero-grid">
       <div class="hero-copy reveal">
         <span class="eyebrow"><span class="dot"></span>Video Editor for Gaming Creators</span>
-        <h1>Transforming your ideas into <span class="gold-text">viral videos</span>.</h1>
-        <p class="sub">High-level editing built around one thing: <b style="color:var(--text)">retention</b>. Hooks that grab, pacing that holds, and edits your audience can't scroll past.</p>
+        <h1>I deliver high-level video editing for gaming creators focused on <span class="gold-text">retention</span>.</h1>
+        <p class="sub">Losing viewers in the first 10 seconds? I build <b style="color:var(--text)">hooks and pacing</b> that keep them locked in till the end.</p>
         <div class="hero-actions">
-          <a href="https://x.com/yakiedt" target="_blank" rel="noopener" class="btn-primary">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.6h3.5l-7.6 8.7 9 11.9h-7l-5.5-7.2-6.3 7.2H1.5l8.2-9.3L1 1.6h7.2l5 6.6 5.7-6.6Zm-1.2 18.4h1.9L6.4 3.6H4.3l13.4 16.4Z"/></svg>
-            DM me to work together!
+          <a href="https://calendly.com/yakimii320/30min" target="_blank" rel="noopener" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg>
+            Book a Free Call
           </a>
           <a href="#work" class="btn-ghost">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4" fill="currentColor" stroke="none"/></svg>
@@ -658,7 +665,7 @@ footer{padding:52px 0 40px;border-top:1px solid var(--border)}
             <img src="assets/c_sockaboy.png" alt="Sockaboy" />
             <img src="assets/c_ignacioblade.jpg" alt="IgnacioBlade" />
           </div>
-          <p class="t-text">Trusted by <b>big creators</b> reaching a<br><b>4.8M+</b> combined audience.</p>
+          <p class="t-text">Trusted by <b>big creators</b> reaching a<br><b>5.3M+</b> combined audience.</p>
         </div>
       </div>
 
@@ -750,11 +757,11 @@ footer{padding:52px 0 40px;border-top:1px solid var(--border)}
   </div>
 </section>
 
-<!-- ================= CLIENT MARQUEE ================= -->
+<!-- ================= CLIENTS (game-ified grid) ================= -->
 <div class="marquee-wrap" id="clients">
-  <div class="marquee-label">Trusted by <b>creators globally</b> — tap a channel</div>
-  <div class="marquee">
-    <div class="marquee-track" id="mtrack"></div>
+  <div class="container">
+    <div class="marquee-label">Trusted by <b>creators worldwide</b> — real channels, real work</div>
+    <div class="client-grid reveal" id="clientGrid"></div>
   </div>
 </div>
 
@@ -762,7 +769,7 @@ footer{padding:52px 0 40px;border-top:1px solid var(--border)}
 <section class="stats">
   <div class="container">
     <div class="stats-grid">
-      <div class="stat reveal"><div class="num">4.8M+</div><div class="lbl">Combined audience reached</div></div>
+      <div class="stat reveal"><div class="num">5.3M+</div><div class="lbl">Combined audience reached</div></div>
       <div class="stat reveal"><div class="num">50+</div><div class="lbl">Videos &amp; shorts delivered</div></div>
       <div class="stat reveal"><div class="num">1–3 days</div><div class="lbl">Typical turnaround time</div></div>
     </div>
@@ -818,11 +825,11 @@ footer{padding:52px 0 40px;border-top:1px solid var(--border)}
       <div class="inner">
         <span class="eyebrow"><span class="dot"></span>Let's build something</span>
         <h2>Let's talk about <span class="gold-text">your project</span>.</h2>
-        <p>Send me a DM on X with what you're working on. I'll get back to you fast — and we'll turn your next upload into something people can't stop watching.</p>
+        <p>Book a free 30-minute call and tell me what you're working on — we'll map out exactly how to turn your next upload into something people can't stop watching.</p>
         <div class="cta-actions">
-          <a href="https://x.com/yakiedt" target="_blank" rel="noopener" class="btn-primary">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.6h3.5l-7.6 8.7 9 11.9h-7l-5.5-7.2-6.3 7.2H1.5l8.2-9.3L1 1.6h7.2l5 6.6 5.7-6.6Zm-1.2 18.4h1.9L6.4 3.6H4.3l13.4 16.4Z"/></svg>
-            DM me on X — @yakiedt
+          <a href="https://calendly.com/yakimii320/30min" target="_blank" rel="noopener" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg>
+            Book a Free Call
           </a>
         </div>
         <div class="cta-mini">
@@ -859,23 +866,33 @@ footer{padding:52px 0 40px;border-top:1px solid var(--border)}
 <script>
 /* ---------- clients (channel links) ---------- */
 const CLIENTS = [
-  {name:"Alex Eubank",   sub:"3.9M followers", img:"c_alexeubank.jpg",   url:"https://www.youtube.com/@officialalexeubank"},
-  {name:"Neotastic",     sub:"413K subs",      img:"c_neotastic.png",    url:"https://www.youtube.com/@Neotastic_Gaming"},
-  {name:"Sockaboy",      sub:"182K subs",      img:"c_sockaboy.png",     url:"https://www.youtube.com/@Sockaboy"},
-  {name:"IgnacioBlade",  sub:"168K subs",      img:"c_ignacioblade.jpg", url:"https://www.youtube.com/@IgnacioBlades"},
-  {name:"Mister_Optimal",sub:"165K followers", img:"c_misteroptimal.jpg",url:"https://www.youtube.com/@mister_optimal"},
-  {name:"MercuryBlox",   sub:"40.3K subs",     img:"c_mercuryblox.png",  url:"https://www.youtube.com/@MercuryBlox"},
+  {name:"Alex Eubank",   sub:"3.9M followers", img:"c_alexeubank.jpg",   platform:"youtube", url:"https://www.youtube.com/@officialalexeubank"},
+  {name:"Neotastic",     sub:"413K subs",      img:"c_neotastic.png",    platform:"youtube", url:"https://www.youtube.com/@Neotastic_Gaming"},
+  {name:"Xeno",          sub:"431K subs",      img:"c_xeno.jpg",         platform:"youtube", url:"https://www.youtube.com/@xenoty"},
+  {name:"Sockaboy",      sub:"182K subs",      img:"c_sockaboy.png",     platform:"youtube", url:"https://www.youtube.com/@Sockaboy"},
+  {name:"IgnacioBlade",  sub:"168K subs",      img:"c_ignacioblade.jpg", platform:"youtube", url:"https://www.youtube.com/@IgnacioBlades"},
+  {name:"Mister_Optimal",sub:"165K followers", img:"c_misteroptimal.jpg",platform:"youtube", url:"https://www.youtube.com/@mister_optimal"},
+  {name:"MercuryBlox",   sub:"40.3K subs",     img:"c_mercuryblox.png",  platform:"youtube", url:"https://www.youtube.com/@MercuryBlox"},
+  {name:"Specular Documentaries", sub:"6.38K subs", img:"c_specular.jpg", platform:"youtube", url:"https://www.youtube.com/@SpecularDocumentaries"},
+  {name:"Luh Tone Family", sub:"3.95K subs",   img:"c_luhtone.jpg",      platform:"youtube", url:"https://www.youtube.com/@theluhtonefamily"},
+  {name:"Specular (Ash)", sub:"14.9K followers", img:"c_specular_ash.jpg", platform:"x",     url:"https://x.com/Specularpotato"},
 ];
 
 /* ---------- work samples (real thumbnails) ---------- */
 const WORK = [
+  {t:"What If Sony Never Made Spider-Man?",   client:"c_specular.jpg", cn:"Specular Documentaries", type:"long", dur:"18:34", thumb:"thumb_spec_spiderman.jpg", url:"https://youtu.be/CwB_I1d0_to"},
+  {t:"What If Iron Man Failed In 2008?",      client:"c_specular.jpg", cn:"Specular Documentaries", type:"long", dur:"11:36", thumb:"thumb_spec_ironman.jpg",   url:"https://youtu.be/zf16No3rOm4"},
+  {t:"What If The MCU Never Existed?",        client:"c_specular.jpg", cn:"Specular Documentaries", type:"long", dur:"12:42", thumb:"thumb_spec_mcu.jpg",       url:"https://youtu.be/_r6Eqeyse5o"},
   {t:"i 1v1'ed MY DUO PARTNER in Roblox Rivals!",           client:"c_mercuryblox.png", cn:"MercuryBlox", type:"long",  dur:"14:13", thumb:"thumb_mercury1v1.jpg",    url:"https://www.youtube.com/watch?v=oGATiY8d6Nw"},
   {t:"Is it Possible to Win BLINDFOLDED!? (Roblox Rivals)",  client:"c_mercuryblox.png", cn:"MercuryBlox", type:"long",  dur:"16:04", thumb:"thumb_blindfold.jpg",     url:"https://www.youtube.com/watch?v=_a20XwZGpgc"},
   {t:"Using a LASER BEAM in Roblox Rivals...",               client:"c_mercuryblox.png", cn:"MercuryBlox", type:"long",  dur:"17:12", thumb:"thumb_laserbeam.jpg",     url:"https://www.youtube.com/watch?v=ZULS0RTUmyI"},
-  {t:"ROBLOX Strongest Battlegrounds Hook",                  client:"c_sockaboy.png",    cn:"Sockaboy",    type:"long",  dur:null,    thumb:"thumb_sockaboy.jpg",      url:"https://drive.google.com/file/d/1F6E7Poh-3pWCachx66FL5ygV6uZ09YX_/view"},
-  {t:"MINECRAFT Prop Hunt Hook",                             client:null,                cn:"Gaming",      type:"long",  dur:null,    thumb:"thumb_prophunt.jpg",      url:"https://drive.google.com/file/d/1lrOvUTAbcDO43ADIDmeX170QJQakqyJk/view"},
   {t:"I Piloted a ZERO GRAVITY FLIGHT In Stormworks!",       client:"c_neotastic.png",   cn:"Neotastic",   type:"long",  dur:"12:04", thumb:"thumb_zerograv.jpg",      url:"https://www.youtube.com/watch?v=92co-kxzS0c"},
   {t:"Can This Aircraft Carrier SURVIVE WAR In Stormworks?!",client:"c_neotastic.png",   cn:"Neotastic",   type:"long",  dur:"15:49", thumb:"thumb_carrier.jpg",       url:"https://www.youtube.com/watch?v=bMPq69PerL0"},
+  {t:"ROBLOX Strongest Battlegrounds Hook",                  client:"c_sockaboy.png",    cn:"Sockaboy",    type:"long",  dur:null,    thumb:"thumb_sockaboy.jpg",      url:"https://drive.google.com/file/d/1F6E7Poh-3pWCachx66FL5ygV6uZ09YX_/view"},
+  {t:"MINECRAFT Prop Hunt Hook",                             client:null,                cn:"Gaming",      type:"long",  dur:null,    thumb:"thumb_prophunt.jpg",      url:"https://drive.google.com/file/d/1lrOvUTAbcDO43ADIDmeX170QJQakqyJk/view"},
+  {t:"Luh Tone — 2K27 Hook",                  client:"c_luhtone.jpg",  cn:"Luh Tone Family",        type:"long", dur:null,    thumb:"thumb_drive2.jpg",       url:"https://drive.google.com/file/d/1o9t9UWeM4GL4cz7jHfa3AcfDmePww4De/view"},
+  {t:"Daniela — DTI Intro",                   client:null,             cn:"Gaming",                 type:"long", dur:null,    thumb:"thumb_drive1.jpg",       url:"https://drive.google.com/file/d/1CHCheY9Wo5sGJKn7TXyPVtElfb4GuvW8/view"},
+  {t:"BrutalSim 2K27 Sample",                 client:null,             cn:"Gaming",                 type:"long", dur:null,    thumb:"thumb_drive3.jpg",       url:"https://drive.google.com/file/d/1GkM-QhNPRFK7Y3W6oARuwMXLChjkadM2/view"},
   {t:"ROBLOX Rivals Short",          client:"c_mercuryblox.png", cn:"MercuryBlox", type:"short", dur:null,    thumb:"thumb_mercuryshort.jpg",  url:"https://drive.google.com/file/d/19z6c0RW4vsFhNqCZflYPdE3NmkdaiKjM/view"},
   {t:"RHQ Fortnite — Short",         client:null,                cn:"Gaming",      type:"short", dur:null,    thumb:"thumb_rhqfn.jpg",         url:"https://drive.google.com/file/d/18-B_6kzfiLKjW6liJm4m3mn6qtCan6FJ/view"},
   {t:"MillieBug — Unboxing",         client:null,                cn:"Gaming",      type:"short", dur:null,    thumb:"thumb_millebug.jpg",      url:"https://drive.google.com/file/d/1-txwSrdTuFTIKf2KJ_OkBdXlslncPtnE/view"},
@@ -906,13 +923,16 @@ const REVIEWS = [
     time:"01/09/2025 02:59", lines:["The shorts are looking to be good"], react:["",""]},
 ];
 
-/* ---------- render clients marquee ---------- */
+/* ---------- render clients (game-ified grid) ---------- */
 (function(){
-  const track=document.getElementById('mtrack');
+  const grid=document.getElementById('clientGrid');
   const yt='<svg viewBox="0 0 24 24"><path d="M23 7.5a3 3 0 0 0-2.1-2.1C19 4.9 12 4.9 12 4.9s-7 0-8.9.5A3 3 0 0 0 1 7.5 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.5a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.5 12 31 31 0 0 0 23 7.5ZM9.8 15.3V8.7l6 3.3-6 3.3Z"/></svg>';
-  const chip=c=>`<a class="client-chip" href="${c.url}" target="_blank" rel="noopener" aria-label="${c.name} on YouTube"><img src="assets/${c.img}" alt="${c.name}"><div><div class="n">${c.name} ${yt}</div><div class="s">${c.sub}</div></div></a>`;
-  const html=CLIENTS.map(chip).join('');
-  track.innerHTML=html+html;
+  const xi='<svg viewBox="0 0 24 24"><path d="M18.9 1.6h3.5l-7.6 8.7 9 11.9h-7l-5.5-7.2-6.3 7.2H1.5l8.2-9.3L1 1.6h7.2l5 6.6 5.7-6.6Zm-1.2 18.4h1.9L6.4 3.6H4.3l13.4 16.4Z"/></svg>';
+  const tile=c=>{
+    const plat=c.platform==='x'?`<span class="plat x">${xi}</span>`:'';
+    return `<a class="gcard" href="${c.url}" target="_blank" rel="noopener" aria-label="${c.name}">${plat}<img class="av" src="assets/${c.img}" alt="${c.name}"><div class="gn">${c.name}</div><div class="gs">${c.sub}</div></a>`;
+  };
+  grid.innerHTML=CLIENTS.map(tile).join('');
 })();
 
 /* ---------- render work ---------- */
