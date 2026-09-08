@@ -394,7 +394,7 @@ header.nav.scrolled{
 .marquee-wrap{padding:var(--s5) 0;border-block:1px solid var(--border);background:rgba(0,0,0,.2)}
 .marquee-label{text-align:center;font-size:.8rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-bottom:30px}
 .marquee-label b{color:var(--gold-light)}
-.client-grid{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;max-width:1080px;margin-inline:auto;
+.client-grid{display:flex;gap:16px;overflow-x:auto;max-width:1080px;margin-inline:auto;
   padding:6px 6px 16px;scroll-padding-inline:6px;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
   scrollbar-width:thin;scrollbar-color:rgba(91,120,214,.5) transparent}
@@ -402,7 +402,7 @@ header.nav.scrolled{
 .client-grid::-webkit-scrollbar-thumb{background:rgba(91,120,214,.45);border-radius:8px}
 .client-grid::-webkit-scrollbar-thumb:hover{background:var(--navy-accent)}
 .client-grid::-webkit-scrollbar-track{background:rgba(255,255,255,.03);border-radius:8px}
-.gcard{position:relative;flex:0 0 172px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px 12px 15px;border-radius:18px;
+.gcard{position:relative;flex:0 0 172px;display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px 12px 15px;border-radius:18px;
   background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--border);overflow:hidden;
   box-shadow:0 12px 28px -16px rgba(0,0,0,.85);transition:transform .22s cubic-bezier(.2,.8,.2,1),border-color .22s,box-shadow .22s}
 .gcard::before{content:"";position:absolute;inset:0 0 auto 0;height:54%;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent);pointer-events:none}
@@ -932,7 +932,28 @@ const REVIEWS = [
     const plat=c.platform==='x'?`<span class="plat x">${xi}</span>`:'';
     return `<a class="gcard" href="${c.url}" target="_blank" rel="noopener" aria-label="${c.name}">${plat}<img class="av" src="assets/${c.img}" alt="${c.name}"><div class="gn">${c.name}</div><div class="gs">${c.sub}</div></a>`;
   };
-  grid.innerHTML=CLIENTS.map(tile).join('');
+  // duplicate the set so it can loop seamlessly (2nd copy hidden from screen readers)
+  const first=CLIENTS.map(tile).join('');
+  const dup=CLIENTS.map(c=>tile(c).replace('class="gcard"','class="gcard" aria-hidden="true" tabindex="-1"')).join('');
+  grid.innerHTML=first+dup;
+
+  // auto-scroll — keeps moving on its own, but stays manually scrollable/swipeable
+  if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    let paused=false, wheelT;
+    const speed=0.6;
+    const pause=()=>{paused=true;}, resume=()=>{paused=false;};
+    ['pointerenter','pointerdown','touchstart','focusin'].forEach(function(ev){grid.addEventListener(ev,pause,{passive:true});});
+    ['pointerleave','pointerup','touchend','focusout'].forEach(function(ev){grid.addEventListener(ev,resume,{passive:true});});
+    grid.addEventListener('wheel',function(){paused=true;clearTimeout(wheelT);wheelT=setTimeout(function(){paused=false;},1400);},{passive:true});
+    (function step(){
+      if(!paused){
+        grid.scrollLeft+=speed;
+        const half=grid.scrollWidth/2;
+        if(grid.scrollLeft>=half) grid.scrollLeft-=half;
+      }
+      requestAnimationFrame(step);
+    })();
+  }
 })();
 
 /* ---------- render work ---------- */
